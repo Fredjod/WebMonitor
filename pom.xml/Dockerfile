@@ -9,6 +9,7 @@ RUN mkdir -p /usr/webmon/conf
 COPY web-monitor-*-jar-with-dependencies.jar /usr/webmon/web-monitor.jar
 
 VOLUME /usr/webmon/conf
+VOLUME /usr/webmon/logs
 
 # specify default command
 WORKDIR /usr/webmon

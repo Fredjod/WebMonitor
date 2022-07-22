@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- https://logging.apache.org/log4j/2.x/manual/appenders.html -->
 <Configuration status="INFO">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
+    <RollingFile name="File" fileName="logs/webmon.log" filePattern="logs/webmon.%i.log.gz" append="true">
+        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"/>
+			<Policies>
+      			<SizeBasedTriggeringPolicy size="250KB" />
+ 			</Policies>
+  		<DefaultRolloverStrategy max="4" />
+    </RollingFile>
   </Appenders>
   <Loggers>
     <Root level="trace">

@@ -26,6 +26,7 @@ public class Config {
         static {
             try {
 				loadPropertiesFile("auth.properties");
+				loadPropertiesFile("params.properties");
 	            // loadPropertiesFile("def.properties", DEF_CONFIG);
 	            // you can have any number of properties file loaded here
 				// properties file have to be in classpath, like the resources package
