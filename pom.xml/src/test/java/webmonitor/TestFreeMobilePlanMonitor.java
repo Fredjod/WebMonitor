@@ -1,4 +1,4 @@
-package freemobile;
+package webmonitor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,19 +8,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import freemobile.MobilePlanMngt;
+import webmonitor.VictorFreeMobilePlanMonitor;
 
 
-public class TestMobilePlanMngt {
-	private static final Logger log = LogManager.getLogger(TestMobilePlanMngt.class);
+public class TestFreeMobilePlanMonitor {
+	private static final Logger log = LogManager.getLogger(TestFreeMobilePlanMonitor.class);
 	
 	@Test
 	void encodeURI () throws Exception {
+		VictorFreeMobilePlanMonitor webmon1 = new VictorFreeMobilePlanMonitor();
+		
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("param1", "parametre ave des espaces");
 		params.put("param2", "paramètre avec des caractère spéciaux!");
 	
-		String result = MobilePlanMngt.encodeURIWithParams ( "https://free.fr/testing", params);
+		String result = webmon1.encodeURIWithParams ( "https://free.fr/testing", params);
 		assertEquals("https://free.fr/testing?param1=parametre+ave+des+espaces&param2=param%C3%A8tre+avec+des+caract%C3%A8re+sp%C3%A9ciaux%21", result);
 		log.trace("paramsencoding: "+ result);
 	}
@@ -28,6 +30,8 @@ public class TestMobilePlanMngt {
 	
 	@Test
 	void parseFreeMobilePage () throws Exception {
+
+		VictorFreeMobilePlanMonitor webmon1 = new VictorFreeMobilePlanMonitor();
 
 		String html_extract_conso_et_factures = "<div class=\"page p-conso\">\n" + 
 				"      <h1 class=\"page__title\"><span class=\"bold\">Bonjour</span> Frederic<span class=\"dot\"></span></h1>\n" + 
@@ -205,19 +209,12 @@ public class TestMobilePlanMngt {
 				"                  </div>\n";
 		
 		HashMap<String, Double> conso = new HashMap<String, Double>();
-		conso = MobilePlanMngt.parseOutOfPlanData (html_extract_conso_et_factures);
-		int activated = MobilePlanMngt.parseOptionStatus(html_extract_mes_options, "data");
+		conso = webmon1.parseKeyStringValueDoubleHastable (html_extract_conso_et_factures, "^\\s*Hors forfait (\\w+) : <span class=\"info\">(.*)€</span>");
+        String regexDataActivation = "^\\s*<a href=\"/account/mes-options\\?update=data&activate=(\\d+)\"";
+		int activated = webmon1.parseValueInteger(html_extract_mes_options, regexDataActivation);
+		
 		
 		assertEquals(Double.valueOf(2.12), conso.get("DATA"));
 		assertEquals(Integer.valueOf(1), Integer.valueOf(activated));
 	}
-	
-	/*
-	@Test
-	void sendTxt () throws Exception {
-		int status = MobilePlanMngt.sendText("Bonjour Victor avec des caractères spéciaux /!\\");
-		assertEquals(Integer.valueOf(200), Integer.valueOf(status));
-		
-	}
-	*/
 }

@@ -1,4 +1,4 @@
-package tools;
+package toolbox;
 
 import static java.util.Objects.nonNull;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import org.apache.logging.log4j.Logger;
  * @author FredJod
  *
  */
-public class Config {
+public class Param {
 
-		private static final Logger log = LogManager.getLogger(Config.class);
+		private static final Logger log = LogManager.getLogger(Param.class);
     	// to make this singleton
-        private Config() {
+        private Param() {
 
         }
 
@@ -45,7 +45,7 @@ public class Config {
          */
         private static void loadPropertiesFile(String filePath) throws Exception {
             try {
-                InputStream input = Config.class.getClassLoader().getResourceAsStream(filePath);
+                InputStream input = Param.class.getClassLoader().getResourceAsStream(filePath);
                 PROPERTIES.load(input);
                 if (nonNull(input)) {
                     input.close();
