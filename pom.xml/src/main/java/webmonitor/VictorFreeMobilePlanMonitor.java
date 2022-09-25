@@ -6,24 +6,32 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 import toolbox.Param;
-import toolbox.Texto;
 
 public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 	
-	private void textoAlert (String msg) throws Exception {
-		Texto texto = new Texto ();
-    	texto.send(
-    		Param.getProperty("FreeMobile.victor.userid"), 
-    		Param.getProperty("FreeSMSService.victor.password"), 
-    		this.getClass().getName()+": "+msg
-    	);
-    	texto.send(
-        		Param.getProperty("FreeMobile.fred.userid"), 
-        		Param.getProperty("FreeSMSService.fred.password"), 
-        		this.getClass().getName()+": "+msg
-        	);		
+	
+	public HashMap<String, String> extractConso (String body) throws Exception {
+		
+	    // Read conso info
+	    HashMap<String, String> conso;
+		conso = parseKeyStringValueStringHastable (body, "^\\s*Hors forfait (\\w+) : <span class=\"info\">(.*)</span>");
+	    return conso;
+		
+	}	
+	
+	public HashMap<String, Boolean> convertConsoToOutOfPlan (HashMap<String, String> conso) throws Exception {
+		
+	    HashMap<String, Boolean> outOfPlan = new HashMap<String, Boolean>();
+		Iterator<Entry<String, String>> it = conso.entrySet().iterator();
+		
+		// Convert conso to outOfPlan
+	    while (it.hasNext()) {
+	        Map.Entry<String, String> entry = (Map.Entry<String, String>)it.next();
+	        outOfPlan.put(entry.getKey(), ! entry.getValue().contains("0.00€"));
+	    }
+	    return outOfPlan;
+		
 	}
 	
 	@Override
@@ -47,21 +55,19 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
             loginFailureCheck(response.body(), "utilisateur ou mot de passe incorrect");
             log.trace("Authentication success");
             
-            // Read DATA conso info
-            HashMap<String, Double> conso = new HashMap<String, Double>();
-	    	conso = parseKeyStringValueDoubleHastable (response.body(), "^\\s*Hors forfait (\\w+) : <span class=\"info\">(.*)€</span>");
-
-	        // Alert if any DATA service out of plan
-	    	Iterator<Entry<String, Double>> it = conso.entrySet().iterator();
-	    	String msg = null;
-	    	
-		    while (it.hasNext()) {
-		        Map.Entry<String, Double> entry = (Map.Entry<String, Double>)it.next();
-		        if (entry.getValue() > 0) {
-		        	msg += "/!\\ Hors Fofait: " + entry.getKey() + " /!\\: " + entry.getValue() + "€.\n";
+            HashMap<String, String> conso = extractConso(response.body());
+            HashMap<String, Boolean> outOfPlan = convertConsoToOutOfPlan(conso);
+            
+            // Alert if any out of plan
+            Iterator<Entry<String, Boolean>> it = outOfPlan.entrySet().iterator();
+            String msg = "";
+    	    while (it.hasNext()) {
+    	        Map.Entry<String, Boolean> entry = (Map.Entry<String, Boolean>)it.next();
+		        if (entry.getValue()) {
+		        	msg += "/!\\ Hors Fofait: " + entry.getKey() + " /!\\: " + conso.get(entry.getKey()) + ".\n";
 		        }
-		    }
-		    if (msg != null) {
+    	    }
+		    if (! msg.isEmpty()) {
 		    	log.warn(msg);
 		    	textoAlert(msg);
 		    }
@@ -76,7 +82,7 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
             
             log.trace("DATA option is "+((activated == 1)?"desactivated":"activated"));
 
-			if (activated == 0 && conso.get("DATA") > 0) {
+			if (activated == 0 && outOfPlan.get("DATA")) {
 				response = httpGetRequest ("https://mobile.free.fr/account/mes-options?update=data&activate=0");
 	            activated = parseValueInteger (response.body(),regexDataActivation);
 	            if (activated == 1) {
@@ -89,7 +95,7 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 	            }
 			}
 			
-			if (activated == 1 && conso.get("DATA") == 0) {
+			if (activated == 1 && outOfPlan.get("DATA")) {
 				response = httpGetRequest ("https://mobile.free.fr/account/mes-options?update=data&activate=1");
 				activated = parseValueInteger (response.body(),regexDataActivation);
 	            if (activated == 0) {

@@ -21,6 +21,9 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import toolbox.Param;
+import toolbox.Texto;
+
 
 public abstract class AbstractWebMonitor {
 
@@ -93,7 +96,23 @@ public abstract class AbstractWebMonitor {
     	return result;
     }
     
-    public final Integer parseValueInteger ( String html, String regex ) throws Exception {
+    public final HashMap<String, String> parseKeyStringValueStringHastable ( String html, String regex ) throws Exception {
+    	
+		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+		Matcher matcher = pattern.matcher(html);
+		
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		while (matcher.find()) {
+			result.put( matcher.group(1), matcher.group(2) );
+		}
+		
+		if (result.isEmpty()) { throw new Exception ("Regex not found: "+regex); }
+		
+    	return result;
+    }
+
+    public final int parseValueInteger ( String html, String regex ) throws Exception {
     	
     	int activated = -1;
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
@@ -107,7 +126,23 @@ public abstract class AbstractWebMonitor {
 		}
 		return activated;
     }
-	
+
+    
+    public final long parseValueLong ( String html, String regex ) throws Exception {
+    	
+    	long returnVal = 0;
+		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+		Matcher matcher = pattern.matcher(html);
+		
+		if (matcher.find()) {
+			returnVal = Long.parseLong(matcher.group(1));
+		}
+		else {
+	    	throw new Exception ("Regex not found: "+regex);
+		}
+		return returnVal;
+    }    
+    
     public final String encodeURIWithParams (String uri, HashMap<String, String> params) throws Exception {
     	Iterator<Entry<String, String>> it = params.entrySet().iterator();
     	String uriWithParams = uri+"?";
@@ -129,6 +164,20 @@ public abstract class AbstractWebMonitor {
 			throw new Exception("Authentication failure, incorrect login/password");
 		}
     }
+   
+	protected final void textoAlert (String msg) throws Exception {
+		Texto texto = new Texto ();
+    	texto.send(
+    		Param.getProperty("FreeMobile.victor.userid"), 
+    		Param.getProperty("FreeSMSService.victor.password"), 
+    		this.getClass().getName()+": "+msg
+    	);
+    	texto.send(
+        		Param.getProperty("FreeMobile.fred.userid"), 
+        		Param.getProperty("FreeSMSService.fred.password"), 
+        		this.getClass().getName()+": "+msg
+        	);		
+	}
     
     public abstract void run ();
 }

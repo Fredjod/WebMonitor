@@ -6,8 +6,11 @@ public class WebMonitorMain {
 		VictorFreeMobilePlanMonitor webmon1 = new VictorFreeMobilePlanMonitor();
 		webmon1.run();
 		
-		BosePromoMonitor webmon2 = new BosePromoMonitor();
-		webmon2.run();
+		// BosePromoMonitor webmon2 = new BosePromoMonitor();
+		// webmon2.run();
+		
+		MediathequeMonitor webmon3 = new MediathequeMonitor();
+		webmon3.run();
 	}
 
 }
