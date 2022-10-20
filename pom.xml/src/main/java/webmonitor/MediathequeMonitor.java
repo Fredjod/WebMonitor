@@ -61,7 +61,7 @@ public class MediathequeMonitor extends AbstractWebMonitor {
 			String dateEnding = jsonAccountNode.get("LoansNextHandingDate").asText();
 			
 			if (! dateEnding.equals("null")) { // the return date value is null
-				String regexDate = "^/Date\\((\\d+)\\+0200\\)";
+				String regexDate = "^/Date\\((\\d+)\\+0";
 				long miliseconds = parseValueLong(dateEnding, regexDate);
 				Date endingDate = new Date(miliseconds);
 	

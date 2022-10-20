@@ -31,47 +31,7 @@ public class TestMediathequeMonitor {
 
 		assertEquals("null", dateEnding);
 		
-		json = "{\n" + 
-				"    \"errors\": [],\n" + 
-				"    \"message\": null,\n" + 
-				"    \"success\": true,\n" + 
-				"    \"d\": {\n" + 
-				"        \"AccountAbstractMessageCollection\": [\n" + 
-				"            {\n" + 
-				"                \"Message\": \"Vous avez emprunté 3 documents\",\n" + 
-				"                \"Priority\": 3,\n" + 
-				"                \"Type\": 0\n" + 
-				"            },\n" + 
-				"            {\n" + 
-				"                \"Message\": \"3 sont à rendre le 23\\/09\\/2022\",\n" + 
-				"                \"Priority\": 0,\n" + 
-				"                \"Type\": 0\n" + 
-				"            },\n" + 
-				"            {\n" + 
-				"                \"Message\": \"Vous n'avez pas de réservation\",\n" + 
-				"                \"Priority\": 3,\n" + 
-				"                \"Type\": 1\n" + 
-				"            }\n" + 
-				"        ],\n" + 
-				"        \"AccountSummary\": {\n" + 
-				"            \"BookingsAvailableCount\": 0,\n" + 
-				"            \"BookingsNotAvailableCount\": 0,\n" + 
-				"            \"BookingsTotalCount\": 0,\n" + 
-				"            \"DisplayName\": \" JAUDIN\",\n" + 
-				"            \"HandingsCount\": 0,\n" + 
-				"            \"LoansLateCount\": 0,\n" + 
-				"            \"LoansNextHandingCount\": 3,\n" + 
-				"            \"LoansNextHandingDate\": \"\\/Date(1663884000000+0200)\\/\",\n" + 
-				"            \"LoansNextHandingIsSoonLate\": false,\n" + 
-				"            \"LoansNotLateCount\": 3,\n" + 
-				"            \"LoansTotalCount\": 3,\n" + 
-				"            \"ProvisionsCount\": 0,\n" + 
-				"            \"ProvisionsHistoCount\": 0,\n" + 
-				"            \"SerialRoutingListsCount\": 0\n" + 
-				"        },\n" + 
-				"        \"Label\": \"Mon compte\"\n" + 
-				"    }\n" + 
-				"}";
+		json = "{\"errors\":[],\"message\":null,\"success\":true,\"d\":{\"AccountAbstractMessageCollection\":[{\"Message\":\"Vous avez emprunté 5 documents\",\"Priority\":3,\"Type\":0},{\"Message\":\"5 sont à rendre le 05\\/11\\/2022\",\"Priority\":0,\"Type\":0},{\"Message\":\"Vous n'avez pas de réservation\",\"Priority\":3,\"Type\":1}],\"AccountSummary\":{\"BookingsAvailableCount\":0,\"BookingsNotAvailableCount\":0,\"BookingsTotalCount\":0,\"DisplayName\":\" JAUDIN\",\"HandingsCount\":0,\"LoansLateCount\":0,\"LoansNextHandingCount\":5,\"LoansNextHandingDate\":\"\\/Date(1667602800000+0100)\\/\",\"LoansNextHandingIsSoonLate\":false,\"LoansNotLateCount\":5,\"LoansTotalCount\":5,\"ProvisionsCount\":0,\"ProvisionsHistoCount\":0,\"SerialRoutingListsCount\":0},\"Label\":\"Mon compte\"}}";
 		
 			jsonNode = new ObjectMapper().readTree(json);
 			status = jsonNode.get("success").asBoolean();
@@ -79,7 +39,7 @@ public class TestMediathequeMonitor {
 			jsonAccountNode = jsonDataNode.get("AccountSummary");
 			loansCount = jsonAccountNode.get("LoansNextHandingCount").asInt();
 			dateEnding = jsonAccountNode.get("LoansNextHandingDate").asText();
-			String regexDate = "^/Date\\((\\d+)\\+0200\\)";
+			String regexDate = "^/Date\\((\\d+)\\+0";
 			long miliseconds = webmon3.parseValueLong(dateEnding, regexDate);
 			Date endingDate = new Date(miliseconds);
 			
@@ -101,8 +61,8 @@ public class TestMediathequeMonitor {
 			
 			assertEquals(true, status);
 			assertEquals(false, currentCal1.after(endingCal));
-			assertEquals(true, currentCal2.after(endingCal));
-			assertEquals(Integer.valueOf(3), Integer.valueOf(loansCount));
+			assertEquals(false, currentCal2.after(endingCal));
+			assertEquals(Integer.valueOf(5), Integer.valueOf(loansCount));
 			
 			
 	}
