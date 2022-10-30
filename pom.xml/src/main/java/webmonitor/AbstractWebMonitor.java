@@ -104,7 +104,11 @@ public abstract class AbstractWebMonitor {
 		
 		HashMap<String, String> result = new HashMap<String, String>();
 		while (matcher.find()) {
-			result.put( matcher.group(1), matcher.group(2) );
+			if (result.get(matcher.group(1)) == null) {
+				result.put(matcher.group(1), "");
+			}
+			
+			result.put( matcher.group(1), result.get(matcher.group(1))+matcher.group(2) );
 		}
 		
 		if (result.isEmpty()) { throw new Exception ("Regex not found: "+regex); }

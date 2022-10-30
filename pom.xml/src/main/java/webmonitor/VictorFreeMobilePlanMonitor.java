@@ -28,7 +28,7 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 		// Convert conso to outOfPlan
 	    while (it.hasNext()) {
 	        Map.Entry<String, String> entry = (Map.Entry<String, String>)it.next();
-	        outOfPlan.put(entry.getKey(), ! entry.getValue().contains("0.00€"));
+	        outOfPlan.put(entry.getKey(), ! entry.getValue().contains("0.00€0.00€"));
 	    }
 	    return outOfPlan;
 		
@@ -64,14 +64,13 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
     	    while (it.hasNext()) {
     	        Map.Entry<String, Boolean> entry = (Map.Entry<String, Boolean>)it.next();
 		        if (entry.getValue()) {
-		        	msg += "/!\\ Hors Fofait: " + entry.getKey() + " /!\\: " + conso.get(entry.getKey()) + ".\n";
+		        	msg += "/!\\ Hors Fofait: " + entry.getKey() + " /!\\: " + conso.get(entry.getKey());
 		        }
     	    }
 		    if (! msg.isEmpty()) {
 		    	log.warn(msg);
-		    	textoAlert(msg);
 		    }
-		    else {
+    	    if ( msg.isEmpty()) {
 		    	log.trace("No out of plan detected");
 		    }
 		        
@@ -86,7 +85,7 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 				response = httpGetRequest ("https://mobile.free.fr/account/mes-options?update=data&activate=0");
 	            activated = parseValueInteger (response.body(),regexDataActivation);
 	            if (activated == 1) {
-	            	msg = "DATA service a été désactivé.";
+	            	msg = "/!\\ Hors Fofait DATA:" + conso.get("DATA")+" - DATA a été désactivé.";
 	            	log.warn(msg);
 			    	textoAlert(msg);
 	            }
@@ -95,11 +94,11 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 	            }
 			}
 			
-			if (activated == 1 && outOfPlan.get("DATA")) {
+			if (activated == 1 && ! outOfPlan.get("DATA")) {
 				response = httpGetRequest ("https://mobile.free.fr/account/mes-options?update=data&activate=1");
 				activated = parseValueInteger (response.body(),regexDataActivation);
 	            if (activated == 0) {
-	            	msg = "DATA service a été réactivé.";
+	            	msg =  "DATA conso:" + conso.get("DATA")+"DATA service a été réactivé.";
 	            	log.warn(msg);
 			    	textoAlert(msg);
 	            }

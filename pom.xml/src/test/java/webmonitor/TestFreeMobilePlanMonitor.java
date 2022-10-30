@@ -38,23 +38,12 @@ public class TestFreeMobilePlanMonitor {
 
 		VictorFreeMobilePlanMonitor webmon1 = new VictorFreeMobilePlanMonitor();
 
-		String html_extract_conso_et_factures = "<div class=\"page p-conso\">\n" + 
-				"      <h1 class=\"page__title\"><span class=\"bold\">Bonjour</span> Frederic<span class=\"dot\"></span></h1>\n" + 
-				"      <div class=\"details\">\n" + 
-				"         <div class=\"title\">Votre Forfait 2€ en détail</div>\n" + 
-				"      </div>\n" + 
-				"            <div class=\"toggle-conso\">\n" + 
-				"         <a href=\"#\" data-target=\"local\" class=\"selected\">En France</a>\n" + 
-				"                  |\n" + 
-				"         <a href=\"#\" data-target=\"roaming\">Hors France</a>\n" + 
-				"               </div>\n" + 
-				"\n" + 
-				"      <div class=\"conso-infos conso-local\">\n" + 
+		String html_extract_conso_et_factures = "      <div class=\"conso-infos conso-local\">\n" + 
 				"         <div class=\"grid-l conso__grid\">\n" + 
 				"            <div class=\"grid-c w-4 w-tablet-4\">\n" + 
 				"               <div class=\"conso__content\">\n" + 
 				"                  <div class=\"conso__text\">\n" + 
-				"                     France : <span class=\"info\">9m 59s</span><br>\n" + 
+				"                     France : <span class=\"info\">11m 59s</span><br>\n" + 
 				"                     International : <span class=\"info\">0s</span><br>\n" + 
 				"                     Hors forfait voix : <span class=\"info\">0.00€</span>\n" + 
 				"                  </div>\n" + 
@@ -68,8 +57,8 @@ public class TestFreeMobilePlanMonitor {
 				"            </div>\n" + 
 				"            <div class=\"grid-c w-4 w-tablet-4\">\n" + 
 				"               <div class=\"conso__content\">\n" + 
-				"                  <div class=\"conso__text\"><span class=\"info\">16</span> SMS / illimités<br>\n" + 
-				"                     Hors forfait SMS : <span class=\"info\">3.00€</span>\n" + 
+				"                  <div class=\"conso__text\"><span class=\"info\">71</span> SMS / illimités<br>\n" + 
+				"                     Hors forfait SMS : <span class=\"info\">0.00€</span>\n" + 
 				"                  </div>\n" + 
 				"                  <div class=\"conso__icon\" data-target=\"sms\">\n" + 
 				"                     <div class=\"wrapper-align\">\n" + 
@@ -84,17 +73,17 @@ public class TestFreeMobilePlanMonitor {
 				"            <div class=\"grid-c w-4 w-tablet-4\">\n" + 
 				"               <div class=\"conso__content\">\n" + 
 				"                  <div class=\"conso__text\">\n" + 
-				"                     <span class=\"info\">20,42Mo</span>\n" + 
+				"                     <span class=\"info\">73,91Mo</span>\n" + 
 				"                     / 50Mo                     <br>\n" + 
 				"                     Hors forfait DATA : <span class=\"info\">0o - 1.20€</span><br>\n" + 
-				"                     Empreinte carbone : <span class=\"info\">0g CO2e</span>\n" + 
+				"                     Empreinte carbone : <span class=\"info\">2g CO2e</span>\n" + 
 				"                  </div>\n" + 
 				"                  <div class=\"conso__icon\" data-target=\"data\">\n" + 
 				"                                             <div id=\"conso-progress\" class=\"progressbar\"\n" + 
-				"                             data-progress-value=\"40,84499168396\"></div>\n" + 
+				"                             data-progress-value=\"147,82543754578\"></div>\n" + 
 				"                                          <div class=\"wrapper-align\">\n" + 
 				"                                                <div>\n" + 
-				"                           <span class=\"big info\">20</span>\n" + 
+				"                           <span class=\"big info\">73</span>\n" + 
 				"                           <span class=\"small info\" style=\"text-transform:capitalize;\">Mo</span>\n" + 
 				"                        </div>\n" + 
 				"                        DATA\n" + 
@@ -105,9 +94,9 @@ public class TestFreeMobilePlanMonitor {
 				"            <div class=\"grid-c w-4 w-tablet-4\">\n" + 
 				"               <div class=\"conso__content\">\n" + 
 				"                  <div class=\"conso__text\">\n" + 
-				"                     <span class=\"info\">5</span> MMS\n" + 
+				"                     <span class=\"info\">6</span> MMS\n" + 
 				"                                          <br>\n" + 
-				"                     Hors forfait MMS : <span class=\"info\">5.00€</span>\n" + 
+				"                     Hors forfait MMS : <span class=\"info\">0.00€</span>\n" + 
 				"                  </div>\n" + 
 				"                  <div class=\"conso__icon\" data-target=\"mms\">\n" + 
 				"                     <div class=\"wrapper-align\">\n" + 
@@ -159,7 +148,7 @@ public class TestFreeMobilePlanMonitor {
 				"                        <span class=\"info\">0o</span>\n" + 
 				"                        / 50Mo\n" + 
 				"                        <br>\n" + 
-				"                        Hors forfait DATA : <span class=\"info\">1.20€</span>\n" + 
+				"                        Hors forfait DATA : <span class=\"info\">0.00€</span>\n" + 
 				"                     </div>\n" + 
 				"                     <div class=\"conso__icon\" data-target=\"data\">\n" + 
 				"                                                   <div id=\"conso-progress\" class=\"progressbar\"\n" + 
@@ -178,7 +167,7 @@ public class TestFreeMobilePlanMonitor {
 				"                  <div class=\"conso__content\">\n" + 
 				"                     <div class=\"conso__text\">\n" + 
 				"                        <span class=\"info\">0</span> MMS<br>\n" + 
-				"                        Hors forfait MMS : <span class=\"info\">5.00€</span>\n" + 
+				"                        Hors forfait MMS : <span class=\"info\">0.00€</span>\n" + 
 				"                     </div>\n" + 
 				"                     <div class=\"conso__icon\" data-target=\"mms\">\n" + 
 				"                        <div class=\"wrapper-align\">\n" + 
@@ -189,28 +178,6 @@ public class TestFreeMobilePlanMonitor {
 				"                  </div>\n" + 
 				"               </div>\n" + 
 				"            </div>\n" + 
-				"         </div>\n" + 
-				"               \n" + 
-				"   <div class=\"buttons\">\n" + 
-				"      <div class=\"text-left ecolo\">\n" + 
-				"         <a href=\"/account/conso-et-factures/empreinte-carbone\" class=\"bt bt-label bt-green bt-eur2 bt-label-left bt-big bt-bold bt-square\">\n" + 
-				"            <span class=\"bt-icon i-ecologie\"></span> Voir mon empreinte carbone\n" + 
-				"         </a>\n" + 
-				"      </div>\n" + 
-				"               <div class=\"text-right\">\n" + 
-				"            <button id=\"toggle-details\" class=\"bt-label bt-eur2 bt-label-left bt-big bt-bold bt-square\">\n" + 
-				"               <span class=\"bt-label__state\" data-button-state=\"loading\">\n" + 
-				"                  <span class=\"bt-icon\">\n" + 
-				"                     <img src=\"/assets/images/loader/submit-loader.gif\" style=\"vertical-align:top;\">\n" + 
-				"                  </span>\n" + 
-				"                  Récupération en cours\n" + 
-				"               </span>\n" + 
-				"               <span class=\"bt-label__state\" data-button-state=\"shown\">\n" + 
-				"                  <span class=\"bt-icon i-eye-striked\"></span> Masquer la conso détaillée\n" + 
-				"               </span>\n" + 
-				"               <span class=\"bt-icon i-eye\"></span> Voir la conso détaillée\n" + 
-				"            </button>\n" + 
-				"         </div>\n" + 
 				"         </div>";
 		
 		
@@ -257,9 +224,8 @@ public class TestFreeMobilePlanMonitor {
        int activated = webmon1.parseValueInteger(html_extract_mes_options, regexDataActivation);
 		
 
-       assertFalse(conso.get("DATA").contains("0.00€"));
-       assertEquals("1.20€", conso.get("DATA"));
-       assertTrue(outOfPlan.get("MMS"));
-		assertEquals(Integer.valueOf(1), Integer.valueOf(activated));
+       assertEquals("0o - 1.20€0.00€", conso.get("DATA"));
+       assertFalse(outOfPlan.get("MMS"));
+       assertEquals(Integer.valueOf(1), Integer.valueOf(activated));
 	}
 }
