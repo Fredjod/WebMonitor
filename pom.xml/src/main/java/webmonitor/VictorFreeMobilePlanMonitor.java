@@ -15,7 +15,8 @@ public class VictorFreeMobilePlanMonitor extends AbstractWebMonitor {
 		
 	    // Read conso info
 	    HashMap<String, String> conso;
-		conso = parseKeyStringValueStringHastable (body, "^\\s*Hors forfait (\\w+) : <span class=\"info\">(.*)</span>");
+	    conso = parseKeyStringValueStringHastable (body, "([A-Za-z]+) <span>/ illimité</span></p>.*<p>Hors forfait : ([0-9]*\\.[0-9]+€)</p>");
+		// conso = parseKeyStringValueStringHastable (body, "^\\s*Hors forfait (\\w+) : <span class=\"info\">(.*)</span>");
 	    return conso;
 		
 	}	

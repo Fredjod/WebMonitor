@@ -7,10 +7,15 @@ RUN mkdir -p /usr/webmon/conf
 
 # copy application WAR (with libraries inside)
 COPY web-monitor-*-jar-with-dependencies.jar /usr/webmon/web-monitor.jar
+COPY mvnw /usr/webmon/mvnw
+ADD .mvn /usr/webmon/.mvn
 
 VOLUME /usr/webmon/conf
 VOLUME /usr/webmon/logs
-
-# specify default command
 WORKDIR /usr/webmon
+
+# Launch Spring Boot service
+RUN /usr/webmon/mvnw spring-boot:run
+
+# specify default command used by crontab
 CMD ["/usr/bin/java", "-jar", "web-monitor.jar"]

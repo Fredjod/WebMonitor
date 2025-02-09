@@ -98,7 +98,7 @@ public abstract class AbstractWebMonitor {
     
     public final HashMap<String, String> parseKeyStringValueStringHastable ( String html, String regex ) throws Exception {
     	
-		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(html);
 		
 		
@@ -107,7 +107,8 @@ public abstract class AbstractWebMonitor {
 			if (result.get(matcher.group(1)) == null) {
 				result.put(matcher.group(1), "");
 			}
-			
+			log.trace("match1: "+ matcher.group(1));
+			log.trace("match2: "+ matcher.group(2));
 			result.put( matcher.group(1), result.get(matcher.group(1))+matcher.group(2) );
 		}
 		
